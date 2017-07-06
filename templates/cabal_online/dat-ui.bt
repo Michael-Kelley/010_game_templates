@@ -1,0 +1,190 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File: ui.dat
+// Description: Template for CABAL's ui.dat file
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Enumerations-------------------------
+
+typedef enum <int> {
+    Hidden = 0,
+    Visible = 1,
+} state;
+
+typedef enum <byte> {
+    TopLeft = 0,
+    TopCenter = 1,
+    TopRight = 2,
+    CenterLeft = 4,
+    CenterCenter = 5,
+    CenterRight = 6,
+    BottomLeft = 8,
+    BottomCenter = 9,
+    BottomRight = 10
+} dock;
+
+typedef struct {
+    int x;
+    int y;
+} point;
+
+
+//-Structures---------------------------
+
+typedef struct {
+    point TopLeft;
+    point BottomRight;
+} rect;
+
+typedef struct {
+    ushort name_length;
+    char name[name_length];
+    uint render_width;
+    uint render_height;
+} texture;
+
+typedef struct {
+    uint unk;
+    Text Element1;
+    Text Element2;
+} elementpair <read=ElementPairRead>;
+
+typedef struct {
+    uint TextureIndex <read=TextureIndexRead>;
+    point TopLeft;
+    int Width;
+    int Height;
+} image;
+
+typedef struct {
+    ushort name_length;
+    char name[name_length];
+    int ID;
+    point Location;
+    int Width;
+    int Height;
+    int unk1;
+    Colour ColourNormal;
+    Colour ColourHover;
+    Colour ColourPressed;
+    dock TextAlignment;
+    byte unk2;
+    short unk3;
+    int TextIndex;
+} txt;
+
+typedef struct {
+    Text Name;
+    Text ParentName;
+    Text name3;
+    int unk0;
+    int ID;  // maybe?
+    int ParentID;
+    int Style;   // Possibly window style?  Certain values cause crashes, so it's likely this.
+    rect Rectangle;
+    int unk1;
+    int unk2;
+    int unk3;
+    int unk4;
+    int unk5;
+    int ElementIndex;
+    state ElementState;
+    int ImageIndex;
+    state ImageState;
+    int TextIndex;
+    state TextState;
+    dock Dock;
+    byte unk6;
+    short unk7;
+} control;
+
+typedef struct {
+    unsigned byte r, g, b, a;
+} RGBA;
+
+typedef struct {
+    RGBA r <hidden=true>;
+    ParseRGBA(r);
+    RGBA colour;
+} text_colour;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+struct HDR {
+    short Version;
+    if (Version == 4)
+        short unknown[3];
+    else
+        short unknown[5];
+} Header;
+
+struct TEX {
+    uint texture_count;
+    texture Textures[texture_count] <optimize=false>;
+} Textures;
+
+struct COL {
+    uint colour_count;
+    text_colour Colours[colour_count] <optimize=false>;
+} Colours;
+
+struct IMG {
+    uint image_count;
+    image Images[image_count] <optimize=false>;
+} Images;
+
+struct ELM {
+    uint element_count;
+    elementpair Elements[element_count] <optimize=false>;
+} Elements;
+
+struct TXT {
+    uint text_count;
+    txt Texts[text_count] <optimize=false>;
+} Texts;
+
+struct CTL {
+    uint control_count;
+    control Controls[control_count] <optimize=false>;
+} Controls;
+
+
+//-English------------------------------
+
+string ElementPairRead( elementpair &e ) {
+    string s;
+    string s1 = (e.Element1.length > 0) ? e.Element1.text : "";
+    string s2 = (e.Element2.length > 0) ? e.Element2.text : "";
+    if (s1 != "" || s2 != "") SPrintf( s, "%s, %s", s1, s2 );
+    return s;
+}
+
+string TextureIndexRead( int32 i ) {
+    string name = Textures.Textures[i].name;;
+    string result;
+
+    SPrintf( result, "%i ( %s )", i, name );
+
+    return result;
+}
+
+
+//-Functions----------------------------
+
+void ParseRGBA(RGBA &r) {
+    FSeek(FTell() - 4);
+    local int blue = (r.b);
+    local int green = (r.g);
+    local int red = (r.r);
+    local int bc = (int)blue * 0x10000 + (int)green * 0x100 + (int)red;
+    SetBackColor(bc);
+}

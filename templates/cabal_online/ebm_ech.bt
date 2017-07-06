@@ -1,0 +1,290 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EBM/ECH
+// Description: Template for CABAL's mesh files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "EBM";
+
+
+//-Enumerations-------------------------
+
+typedef enum <uint32> {
+    MATERIAL         = 0x41470201,
+    MESH             = 0x41470202,
+    ARMATURE         = 0x41470203,
+    ANIMATION        = 0x41470204,
+    INFLUENCE        = 0x41470205,
+} CID;      // Chunk ID's
+
+typedef enum <int32> {
+    MULTIPLY                = 0x04,
+    GRAIN_MERGE             = 0x08,
+    HARD_LIGHT              = 0x09,
+    MULTIPLY__INVERT_PARENT = 0x0A,
+    ODD_FLICKER_EFFECT      = 0x0E,
+    BELOW                   = 0x10,
+    SCREEN                  = 0x12,
+    SOME_PURE_WHITE_THING   = 0x13,
+    CHROME                  = 0x18,
+} RenderFlag;    // 2nd layer render flag
+
+
+//-Structures---------------------------
+
+typedef struct {
+    byte unk_bit : 1;
+    byte unk_bit : 1;
+    Bool additive_blend : 1 <comment="\"Ghost\" effect">;
+    byte unk_bit : 1;
+    byte unk_bit : 1;
+    byte unk_bit : 1;
+    byte unk_bit : 1;
+    Bool enable_alpha : 1;
+} ModelFlag;
+
+typedef struct {
+    int version <format=hex>;
+	ushort unkus;
+	ModelFlag model_flag <open=true>;
+    ubyte alpha_threshold;
+    ushort unkus;
+	Vec3f bound_min;          // Bounding box lower vertex
+	Vec3f bound_max;          // Bounding box upper vertex
+	uint scale_percentage;      // Scale of model (default = 100%)
+	CID chunk_id <format=hex>;  // ID for the next chunk
+} Header;
+
+typedef struct {
+    Vec4f c0 <hidden=true>;
+    ParseRGBA(c0);
+    Vec4f ambient;
+
+    Vec4f c1 <hidden=true>;
+    ParseRGBA(c1);
+    Vec4f diffuse;
+
+	Vec4f c2 <hidden=true>;
+    ParseRGBA(c2);
+    Vec4f specular;
+
+    Vec4f c3 <hidden=true>;
+    ParseRGBA(c3);
+    Vec4f emissive;
+    SetBackColor(cNone);
+
+	float power;
+} MatProps;     // Material properties
+
+typedef struct {
+    int material_index <read=MaterialIndexReadI>;
+    Bool is_faceted;
+    Vec2f scroll_speed;
+    RenderFlag render_flags;
+} SecondaryTexture;
+
+typedef struct {
+	Texture texture;
+    Bool is_faceted;
+    Vec2f scroll_speed;
+} PrimaryTexture;
+
+typedef struct {
+    MatProps material_properties;
+    PrimaryTexture texture;
+    SecondaryTexture layer;
+} Material;
+
+typedef struct {
+    MatProps material_properties;
+    Texture texture;
+} Material2;
+
+typedef struct {
+    uint count;
+    if (count != 0) {
+        uint vertex_index[count];
+        float weight[count]; }
+} InfluenceBone;
+
+typedef struct {
+    InfluenceBone influence_for_bone[skeleton.count] <optimize=false>;
+} Influence;
+
+typedef struct {
+    Text id;
+    Mat4x4 world_matrix;
+    Mat4x4 local_matrix;
+    int root_bone_id;   // Bone to attach mesh to.  Causes entire mesh to "stick" to that bone, moving when it does.
+    ubyte material_index <read=MaterialIndexRead>;
+    ushort vertex_count;
+    ushort face_count;
+
+    if (model_header.version == 0x3F103)
+        Text efx_file;
+
+    Vertex vertices[vertex_count];
+    Face faces[face_count];
+
+    if (model_header.version == 0)
+        int faces2[face_count]; // WTF?!
+
+    // Hopefully this works for all models.  It should do.
+    if (vertex_count > 0) {
+        CID chunk_id <format=hex>;
+        ushort influence_count;
+        if (influence_count != 0)
+            Influence influences[influence_count] <optimize=false>;
+    }
+} Mesh;
+
+typedef struct {
+    Text id;
+    int parent_bone_index;
+    Mat4x4 bone_space_matrix;
+    Mat4x4 parent_bone_space_matrix;
+} Bone <read=BoneRead>;
+
+typedef struct {
+    Text id;
+    uint translation_count;
+    Translation translations[translation_count] <optimize=false>;
+    uint rotation_count;
+    Rotation rotations[rotation_count] <optimize=false>;
+} Transformation <read=TransformationRead>;
+
+typedef struct {
+    Text id;
+    ushort count;
+    Transformation transformations[count] <optimize=false>;
+} Animation <read=AnimationRead>;
+
+typedef struct {
+    ushort count;
+    local ushort tex_name_lengths[count];
+    local short i = 0;
+	Material materials[count] <optimize=false>;
+    CID chunk_id <format=hex>;
+} MT;
+
+typedef struct {
+    ushort count;
+    local ushort tex_name_lengths[count];
+    local short i = 0;
+	Material2 materials[count] <optimize=false>;
+    CID chunk_id <format=hex>;
+} MT2;
+
+typedef struct {
+    ushort count;
+    Mesh meshes[count] <optimize=false>;
+    CID chunk_id <format=hex>;
+} GE;
+
+typedef struct {
+    ushort count;
+    if (count != 0)
+        Bone bones[count] <optimize=false>;
+    CID chunk_id <format=hex>;
+} SK;
+
+typedef struct {
+    ushort count;
+    if (count != 0)
+        Animation animations[count] <optimize=false>;
+} AN;
+
+typedef struct {
+    local int i;
+
+    for (i = 0; i < 210; i++)
+    {
+        BGRA c <hidden=true>;
+        ParseColour(c);
+        BGRA glow_colour;
+
+        SetBackColor(cNone);
+        SetForeColor(cNone);
+    }
+} GL;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+Header model_header <comment="Unknown values, model flag, bounding box, and following chunk ID">;
+
+if (model_header.chunk_id == 0x20A38100)
+    MT2 materials_and_textures <comment="Materials and textures">;
+else
+    MT materials_and_textures <comment="Materials and textures">;
+
+SK skeleton <comment="Bones">;
+GE geometry <comment="Meshes">;
+AN animations <comment="Animation sequences">;
+
+if (FileSize() - FTell() > 4)
+    GL glows;
+
+
+//-Functions----------------------------
+
+void ParseRGBA(Vec4f &r) {
+    FSeek(FTell() - 16);
+    local float blue = (r[2] * 255.0f);
+    local float green = (r[1] * 255.0f);
+    local float red = (r[0] * 255.0f);
+    local int bc = (int)blue * 0x10000 + (int)green * 0x100 + (int)red;
+    SetBackColor(bc);
+}
+
+
+//-English------------------------------
+
+string MaterialIndexRead(ubyte i) {
+    string name = materials_and_textures.materials[i].texture.texture.id.text;
+    string s;
+    SPrintf(s, "%i ( %s )", i, name);
+
+    return s;
+}
+
+string MaterialIndexReadI(int i) {
+    string name;
+
+    if (i == -1)
+        name = "NULL";
+    else
+        name = materials_and_textures.materials[i].texture.texture.id.text;
+
+    string s;
+    SPrintf(s, "%i ( %s )", i, name);
+
+    return s;
+}
+
+string AnimationRead(Animation &a) {
+    return (a.id.text);
+}
+
+string TransformationRead(Transformation &t) {
+    string s;
+    SPrintf(s, "%s", t.id.text);
+
+    return s;
+}
+
+string BoneRead(Bone &b) {
+    string s;
+    SPrintf(s, "%s", b.id.text);
+    return s;
+}

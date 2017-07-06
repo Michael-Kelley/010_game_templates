@@ -1,0 +1,56 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: tmap.bin
+// Description: Template for CABAL's .tmap.bin files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+
+//-Structures---------------------------
+
+typedef struct {
+    uint unk;
+    uint id;
+    uint column;
+    uint row;
+    uint unk;
+    uint unk;
+} TILE_HEADER;
+
+typedef struct {
+    uint tile_count;
+    uint tile_id;
+    uint tile_id;
+    uint tile_id;
+    uint tile_id;
+    uint tile_id;
+    uint tile_id;
+    uint tile_id;
+    uint tile_id;
+    uint tile_id;
+    uint unk[152];
+} TILE_DATA;
+
+typedef struct {
+    TILE_HEADER header;
+    TILE_DATA data;
+    TILE_DATA data;
+    TILE_DATA data;
+    TILE_DATA data;
+    TILE_DATA data;
+    TILE_DATA data;
+    TILE_DATA data;
+    TILE_DATA data;
+    TILE_DATA data;
+    uint pixels[256];
+} TILE;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+int version;
+int tile_count;
+TILE tiles[tile_count] <optimize=false>;

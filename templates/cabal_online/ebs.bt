@@ -1,0 +1,94 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EBS
+// Description: Template for CABAL's bulletin board files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "EBS";
+
+
+//-Enumerations-------------------------
+
+typedef enum <ubyte> {
+    NONE            = 0x00,
+    CROSS           = 0x01,
+    STAR            = 0x02,
+    BILLBOARD_X     = 0x03,
+    BILLBOARD_X_Y   = 0x04,
+    ROTATE_90       = 0x05,
+} Mode;     // Some neat shit here :)
+
+
+//-Structures---------------------------
+
+typedef struct {
+	uint magic <format=hex>;
+	ushort unkus <format=hex>;
+	uint model_flags <format=hex>;
+	Vector3 bound_min;        //  Bounding box lower vertex
+	Vector3 bound_max;        //  Bounding box upper vertex
+} Header;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+Header model_header <read=CommentHDR>;
+
+ushort unkus;
+ushort unkus;
+Texture texture;
+float width;
+float height;
+uint unkui;
+uint unkui;
+uint unkui;
+float unkf;
+uint unkui;
+uint unkui;
+Mode display_mode;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+ushort unkus;
+uint unkui;
+uint unkui;
+uint unkui;
+uint unkui;
+uint unkui;
+uint unkui;
+uint unkui;
+uint unkui;
+uint unkui;
+uint unkui;
+ushort unkus;
+uint frames_rows;
+uint frames_cols;
+uint frame_count;
+Bool loop_anim;
+float anim_length;
+
+
+//-Chunk-Descriptors--------------------
+
+string CommentHDR(Header &voi) {
+    return ("Unknown values, model flag, bounding box, and following chunk ID.");
+}

@@ -1,0 +1,17 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EFX
+// Description: Appends an empty object to the EFX's object array.
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+
+if (!exists(estType)) RunTemplate("cabal/efx.bt");
+
+InsertBytes(FileSize() - 10, 322);
+object_count += 1;
+
+// Refresh
+RunTemplate("cabal/efx.bt");

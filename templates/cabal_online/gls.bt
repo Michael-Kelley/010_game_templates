@@ -1,0 +1,27 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: GLS
+// Description: Template for CABAL's glass(?) files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Main---------------------------------
+
+byte unkb;  // Always 3?
+ushort magic <format=hex>;
+byte unkb;
+ushort unkus;
+byte model_flag <format=hex>;
+ubyte alpha_threshold;
+ushort unkus;
+Vec3f bound_min;          // Bounding box lower vertex
+Vec3f bound_max; 
+uint unkui;
+float unkf;
+float unkf;
+float unkf;

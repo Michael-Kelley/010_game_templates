@@ -1,0 +1,36 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EBD
+// Description: Template for CABAL's EBD (unknown) file
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "EBD";
+
+
+//-Main---------------------------------
+
+ubyte sig;
+ushort magic <format=hex>;
+byte unkb;
+ushort unkus;
+uint unkui;
+Vector3 bounds_min;
+Vector3 bounds_max;
+ushort unkus;
+ushort unkus;
+ushort id_length;
+ubyte id[id_length];
+uint tex_length;
+ubyte tex[tex_length];
+float unkf;
+float unkf;
+int unki;
+ubyte unkub;

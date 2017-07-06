@@ -1,0 +1,219 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: MCL
+// Description: Template for CABAL's map files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Enumerations-------------------------
+
+typedef enum {
+    SHOP = 1,
+	INSTRUCTOR,
+	OFFICER,
+	CORE_ALCHEMIST,
+	PORT_SERVICE,
+	WARP,
+	DIALOGUE
+}   IType;
+
+
+//-Structures---------------------------
+
+typedef struct {
+	uint magic <format = hex>;
+	Vector3 unkv0;
+	uint unkui0;
+	Vector3 unkv1;
+	Quaternion unkq2;
+    uint unkui1;
+    Quaternion unkq3;
+	uint unkui2;
+	uint unkui3;
+	uint unkui4;
+	Vector3 unkv5;
+	uint unkui5;
+	uint unkui6;
+	uint unkui7;
+	uint unkui8;
+	uint unkui9;
+	uint unkuiA;
+	uint unkuiB;
+	uint unkuiC;
+	uint unkuiD;
+    int unki0;
+} Header;
+
+typedef struct {
+	uint size;
+    
+    if (size > 4)
+    {
+        char sig[4];
+    
+        if (sig == "DDS ")
+        {
+	        DDSHeader header;
+            ubyte data[size - 128];
+        }
+        else
+            ubyte data[size - 4];
+    }
+} TextureNoID;
+
+typedef struct {
+    Vector3 position;
+    ubyte r;
+    ubyte g;
+    ubyte b;
+    ubyte a;
+    Vector2 uv;
+} VertexColour;
+
+typedef struct {
+    Vector3 position;
+    Vector2 uv;
+} VertexNoNorm;
+
+typedef struct {
+	Text id;
+	float unkf;
+    float unkf;
+    uint unkui;
+    uint unkui;
+} Effect;
+
+typedef struct {
+    uint face_count;
+    uint vertex_count;
+    VertexColour vertices[vertex_count];
+    Face faces[face_count];
+    int face_texture_ids[face_count];
+    int texture_id_count;
+    int texture_ids_used[texture_id_count];  // Lists the texture ID's referenced in face_texture_ids
+} Layer1;
+
+typedef struct {
+    uint face_count;
+    uint vertex_count;
+    VertexNoNorm vertices[vertex_count];
+    Face faces[face_count];
+    int face_texture_ids[face_count];
+    int texture_id_count;
+    int texture_ids_used[texture_id_count];
+} Layer2;
+
+typedef struct {
+    Vector3 bound_min;
+    Vector3 bound_max;
+    BoolI has_layer1;
+    if (has_layer1 == ___TRUE)
+        Layer1 layer1;
+    BoolI has_layer2;
+    if (has_layer2 == ___TRUE)
+        Layer2 layer2;
+} Tile;
+
+typedef struct {
+    Text id;
+    Vector3 bound_min;
+    Vector3 bound_max;
+} Model;
+
+typedef struct {
+    Text id;
+    Vector3 position;
+    Quaternion rotation;
+    Vector3 scale;
+    uint model_id;
+    IType type;
+    uint flags;
+    uint npc_id;
+} IDoodad;
+
+typedef struct {
+    Vector3 position;
+    Quaternion rotation;
+    Vector3 scale;
+    uint model_id;
+} Doodad;
+
+typedef struct {
+    Text id;
+    float volume;
+} Sound;
+
+typedef struct {
+    uint count;
+    Sound sounds[count] <optimize=false>;
+} SoundGroup;
+
+typedef struct {
+    int unki;
+    int unki;
+    int unki;
+    int unki;
+    short unks;
+    short unks;
+} Unknown;
+
+typedef struct { float unk[257]; } _257Float;
+typedef struct { int32 unk[256]; } _256Int32;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+Header header;
+
+uint effect_count;
+Effect effects[effect_count] <optimize=false>;
+
+uint texture_count;
+TextureNoID textures[texture_count] <optimize=false>;
+
+uint unkui;
+uint unkui;
+uint unkui;
+
+_257Float height_map[257];
+_256Int32 thread_map[256];
+
+TextureNoID tile_textures[64] <optimize=false>;
+
+Tile tiles[64] <optimize=false>;
+
+uint model_count;
+Model models[model_count] <optimize=false>;
+
+uint idoodad_count;
+IDoodad interactive_doodads[idoodad_count] <optimize=false>;
+
+uint sdoodad_count;
+Doodad solid_doodads[sdoodad_count] <optimize=false>;
+
+uint unk_count;
+Unknown unknown[unk_count] <optimize=false>;
+
+uint doodad_count;
+Doodad doodads[doodad_count] <optimize=false>;
+
+uint unk0_count;
+uint unkuia0[unk0_count];
+
+ubyte unkuba0[256 * 256];
+ubyte unkuba1[256 * 256];
+
+uint sound_count;
+SoundGroup sound_groups[sound_count] <optimize=false>;
+
+int unki;
+int unki;
+float unkf;
+int unki;

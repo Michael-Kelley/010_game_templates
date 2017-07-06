@@ -1,0 +1,82 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File: xdata.enc (unpacked)
+// Description: Template for CABAL's xdata file
+//--------------------------------------##
+// Author: x30
+// Website: http://cabal.ws
+//--------------------------------------##
+
+
+//-Local-Variables----------------------
+
+local int x = 0;
+
+
+//-Structures---------------------------
+
+typedef struct {
+    char name[260];
+} Folder <read = FolderName>;
+
+typedef struct {
+    byte folder_index <read = FolderNameIndex>;
+    char name[60];
+    byte unk1;
+    char hash[32];
+    byte unk2;
+} File <read = FileNameRead, write = FileHashWrite>;
+
+
+//-Functions----------------------------
+
+string FolderName(Folder &f) {
+    string s;
+    SPrintf(s, "%s", f.name);
+    return s;
+}
+
+string FolderNameIndex(byte i) {
+    i -= 1;
+    string s;
+
+    if(i == -1)
+        s = "MagicKey";
+    else
+        SPrintf(s, "%i ( %s )", i, folder[i].name);
+
+    return s;
+}
+
+string FileNameRead(File &f) {
+    string s;
+
+    if(f.folder_index == 0)
+        s = "MagicKey";
+    else
+        SPrintf(s, "%s", f.name);
+
+    return s;
+}
+
+void FileHashWrite(File &f, string s ) {
+    SScanf(s, "%s", f.hash);
+}
+
+
+//-Main---------------------------------
+
+int folders;
+
+while (x < folders) {
+    Folder folder;
+    x += 1;
+}
+
+x = 0;
+int files;
+
+while (x < files) {
+    File file;
+    x += 1;
+}

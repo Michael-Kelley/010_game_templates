@@ -1,0 +1,39 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File: Data.enc
+// Description: Template for CABAL's Data.enc file
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "Data.ENC";
+
+
+//-Structures---------------------------
+
+typedef struct {
+    local int x = 0;
+
+    uint32 chunk_id <format=hex>;
+    uint32 chunk_size;
+
+    while (x < chunk_size)
+    {
+        Text file;
+        x += 2 + file.length;
+    }
+} FileList;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+FileList EFX;
+FileList WAV;

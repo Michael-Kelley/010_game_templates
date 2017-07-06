@@ -1,0 +1,61 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EBM, EBS, ECH, EPS
+// Description: Replaces a given texture with one from your system.
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+
+Assert(exists(estType), "No template results found.  Please run the appropriate template before attempting to run this script again.");
+Assert(estType == "EBM" || estType == "EBS" || estType == "ECH" || estType == "EPS", "File format not supported.");
+
+if (estType != "EPS")
+{
+    int index = InputNumber("Please enter the Material index", "Material Index:", "0");
+    Assert(index != BAD_VALUE, "No Material index was specified.");
+    Assert(index < materials_and_textures.count, "Invalid Material index specified.");
+}
+
+string file = InputOpenFileName("Select a texture...", "*.dds|*.png");
+
+Assert(file != "", "No texture specified.");
+
+int fileNum = GetFileNum();
+FileOpen(file);
+int size = FileSize();
+FileClose();
+FileSelect(fileNum);
+
+if (estType != "EPS")
+{
+    int64 start = startof(materials_and_textures.materials[index].texture.data);
+}
+else
+{
+    int64 start = startof(texture.data);
+}
+
+if (estType != "EPS")
+{
+    DeleteBytes(start, materials_and_textures.materials[index].texture.size);
+}
+else
+{
+    DeleteBytes(start, texture.size);
+}
+
+InsertFile(file, start);
+
+if (estType != "EPS")
+{
+    materials_and_textures.materials[index].texture.size = size;
+}
+else
+{
+    texture.size = size;
+}
+
+// Refresh
+RunTemplate("cabal/" + estType + ".bt");

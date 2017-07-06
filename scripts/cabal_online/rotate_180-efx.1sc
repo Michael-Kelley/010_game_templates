@@ -1,0 +1,20 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EFX
+// Description: Rotates all objects in the EFX by 180 degrees.  Useful for fixing staffs on EP2 clients.
+//--------------------------------------##
+// Author: x30unlimited
+// Website: http://cabal.ws
+//--------------------------------------##
+
+
+short i;
+short ii;
+
+for(i=0; i<object_count ;i++ ){
+    for(ii=0; ii<4;ii++ ){
+        objects[i].animations[ii].transformation.translate.y=0-objects[i].animations[ii].transformation.translate.y;
+        objects[i].animations[ii].transformation.rotate.x+=3.14;
+        objects[i].animations[ii].transformation.rotate.y+=3.14;
+    }
+}

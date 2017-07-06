@@ -1,0 +1,53 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: MFX
+// Description: Template for CABAL's magic effect files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "MFX";
+
+
+//-Structures---------------------------
+
+typedef struct {
+	uint32 Magic <format=hex>;
+	uint16 unk_0 <format=hex>;
+	FLAG Model_Flag <format=hex>;
+	Vec3D bound_min;        //  Bounding box lower vertex
+	Vec3D bound_max;        //  Bounding box upper vertex
+} HEADER;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+HEADER ModelHeader <read=CommentHDR>;
+
+int unk_0;
+Text model;
+Text texture;
+float animation_length;
+BOOLI fade_out;
+int outline_thickness;
+Colour colour;
+Vec2f translation;
+int rotation;   // ?
+int unk_7;
+int unk_8;
+int unk_9;
+
+
+//-Chunk-Descriptors--------------------
+
+string CommentHDR(HEADER &voi) {
+    return ("Unknown values, model flag, bounding box, and following chunk ID.");
+}

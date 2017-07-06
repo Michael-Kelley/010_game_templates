@@ -1,0 +1,211 @@
+//--------------------------------------##
+// Description: General structures and enums
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+
+//-Enumerations-------------------------
+
+typedef enum <ubyte> {
+    _FALSE   = 0,
+    _TRUE    = 1,
+} Bool;
+
+typedef enum <int> {
+    __FALSE  = 0,
+    __TRUE   = 1,
+    ___TRUE  = -1,
+} BoolI;
+
+typedef enum <ubyte> {
+    USE_ALPHA                       = 0x02,
+    BLEND_ADDITIVE                  = 0x04,
+    CENTER_ORIGIN                   = 0x20,
+    CENTER_ORIGIN_USE_ALPHA         = 0x22,
+    CENTER_ORIGIN_BLEND_ADDITIVE    = 0x24,
+    ANCHOR                          = 0x34,
+} Flag;      // Model Flags.
+
+
+//-Structures---------------------------
+
+typedef float Vec4f[4] <read=Vec4fRead, write=Vec4fWrite>;
+typedef float Vec3f[3] <read=Vec3fRead, write=Vec3fWrite>;
+typedef float Vec2f[2] <read=Vec2fRead, write=Vec2fWrite>;
+
+typedef struct {
+    struct ROW {
+        Vec4f col;
+    } row[4] <optimize=false, read=Mat4x4RowRead>;
+} Mat4x4;
+
+typedef struct {
+    ubyte blue, green, red, alpha;
+} BGRA <read=BGRARead, write=BGRAWrite>;
+
+typedef struct {
+    Vec3f position;
+    Vec3f normal;
+    Vec2f uv;
+} Vertex;
+
+typedef struct {
+    ushort verts[3];
+} Face <read=FaceRead, write=FaceWrite>;
+
+typedef struct {
+    ushort length;
+    if (length != 0)   // remove stupid (array not generated) messages
+        char text[length];
+} Text <read=TextRead, write=TextWrite>;
+
+typedef struct {
+    uint size;
+    uint flags;
+    char four_cc[4];
+    uint rgb_bit_count;
+    uint r_bit_mask;
+    uint g_bit_mask;
+    uint b_bit_mask;
+    uint a_bit_mask;
+} DDSPixelFormat;
+
+typedef struct {
+    uint size;
+    uint flags;
+    uint height;
+    uint width;
+    uint pitch_or_linear_size;
+    uint depth;
+    uint mipmap_count;
+    uint reserved1[11];    // unused
+    DDSPixelFormat pixel_format;
+    uint caps;
+    uint caps2;
+    uint caps3;            // unused
+    uint caps4;            // unused
+    uint reserved2;        // unused
+} DDSHeader;
+
+typedef struct {
+	Text id;
+	uint size;
+
+    if (size > 4)
+    {
+        char sig[4];
+    
+        if (sig == "DDS ")
+        {
+	        DDSHeader header;
+            ubyte data[size - 128];
+        }
+        else
+            ubyte data[size - 4];
+    }
+} Texture;
+
+typedef struct {
+    float keyframe_second;
+    Vec3f position;
+} Translation <read=TranslationRead, write=TranslationWrite>;
+
+typedef struct {
+    float keyframe_second;
+    Vec4f position;
+} Rotation <read=RotationRead, write=RotationWrite>;
+
+
+//-Functions----------------------------
+
+void ParseColour(BGRA &c) {
+    FSeek(FTell() - 4);
+    local int bc = (c.red * 0x10000) + (c.green * 0x100) + c.blue;
+    //local int fc = ((0xFF - c.r) * 0x10000) + ((0xFF - c.g) * 0x100) + (0xFF - c.b);
+    SetBackColor(bc);
+    //SetForeColor(fc);
+}
+
+
+//-English------------------------------
+
+string BGRARead(BGRA &c) {
+    string s;
+    SPrintf(s, "(%i %i %i %i)", c.red, c.green, c.blue, c.alpha);
+    return s;
+}
+void BGRAWrite(BGRA &c, string s) {
+    SScanf(s, "(%i %i %i %i)", c.red, c.green, c.blue, c.alpha);
+}
+
+string Vec2fRead(Vec2f &v) {
+    string s;
+    SPrintf(s, "(%f %f)", v[0], v[1]);
+    return s;
+}
+void Vec2fWrite(Vec2f &v, string s) {
+    SScanf(s, "(%f %f)", v[0], v[1]);
+}
+
+string Vec3fRead(Vec3f &v) {
+    string s;
+    SPrintf(s, "(%f %f %f)", v[0], v[1], v[2]);
+    return s;
+}
+void Vec3fWrite(Vec3f &v, string s) {
+    SScanf(s, "(%f %f %f)", v[0], v[1], v[2]);
+}
+
+string Vec4fRead(Vec4f &v) {
+    string s;
+    SPrintf(s, "(%f %f %f %f)", v[0], v[1], v[2], v[3]);
+    return s;
+}
+void Vec4fWrite(Vec4f &v) {
+    string s;
+    SScanf(s, "(%f %f %f %f)", v[0], v[1], v[2], v[3]);
+    return s;
+}
+
+string Mat4x4RowRead(struct ROW &r) {
+    return Vec4fRead(r.col);
+}
+
+string FaceRead(Face &f) {
+    string s;
+    SPrintf(s, "(%i %i %i)", f.verts[0], f.verts[1], f.verts[2]);
+    return s;
+}
+void FaceWrite(Face &f, string s) {
+    SScanf(s, "(%i %i %i)", f.verts[0], f.verts[1], f.verts[2]);
+}
+
+string TextRead(Text &t) {
+    if (exists(t.text))
+        return t.text;
+    else return "";
+}
+void TextWrite(Text &t, string s) {
+    t.length = Strlen(s);
+    t.text = s;
+}
+
+string TranslationRead(Translation &t) {
+    string s;
+    SPrintf(s, "(%f %f %f)", t.position[0], t.position[0], t.position[0]);
+    return s;
+}
+void TranslationWrite(Translation &t, string s) {
+    SScanf(s, "(%f %f %f)", t.position[0], t.position[1], t.position[2]);
+}
+
+string RotationRead(Rotation &r) {
+    string s;
+    SPrintf(s, "(%f %f %f %f)", r.position[0], r.position[1], r.position[2], r.position[3]);
+    return s;
+}
+void RotationWrite(Rotation &r, string s) {
+    SScanf(s, "(%f %f %f %f)", r.position[0], r.position[1], r.position[2], r.position[3]);
+}

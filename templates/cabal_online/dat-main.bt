@@ -1,0 +1,78 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File: main.dat
+// Description: Template for CABAL's main.dat file
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "Main.DAT";
+
+
+//-Enumerations-------------------------
+
+typedef enum <uint>
+{
+    RECOMMENDED = 0,
+    _4_3,
+    _16_9
+} Ratio;
+
+typedef enum <uint>
+{
+    CHASE = 1,
+    FREE,
+    QUARTER = 5
+} View;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+uint width;
+uint height;
+uint refresh_rate;
+uint unkui;
+float gamma;
+uint unkui;
+uint unkui;
+uint volume_sound;
+uint volume_ambience;
+BoolI weather;
+uint unkui;
+uint shadow;
+uint water_effect;
+uint blur;
+Ratio screen_ratio;
+BoolI whisper;
+BoolI party;
+BoolI trade;
+BoolI pvp;
+BoolI player_name;
+uint unkui;
+BoolI monster_name;
+uint unkui;
+BoolI npc_name;
+uint unkui;
+BoolI item_name;
+uint unkui;
+BoolI distortion;
+BoolI auto_attack;
+View camera_view;
+char account[15];
+BoolI character_hp;
+BoolI monster_hp;
+BoolI use_fkeys;
+BoolI guild_name;
+BoolI shout;
+BoolI dialogue_bubbles;
+uint unkui;
+uint unkui;
+uint unkui;

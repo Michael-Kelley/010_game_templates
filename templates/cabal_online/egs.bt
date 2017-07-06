@@ -1,0 +1,67 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EGS
+// Description: Template for CABAL's group files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "EGS";
+
+
+//-Structures---------------------------
+
+typedef struct {
+	uint32 magic <format=hex>;
+	ushort unkus <format=hex>;
+	uint unkui <format=hex>;
+	Vector3 bound_min;        //  Bounding box lower vertex
+	Vector3 bound_max;        //  Bounding box upper vertex
+	uint unkui <format=hex>;
+} Header;
+
+typedef struct {
+    Text id;
+    uint translation_count;
+    Translation translations[translation_count] <optimize=false>;
+    uint rotation_count;
+    Rotation rotations[rotation_count] <optimize=false>;
+} Transformation <read=TransformationRead>;
+
+typedef struct {
+    Text id;
+    ushort count;
+    Transformation transformations[transformation_count] <optimize=false>;
+} Animation <read=AnimationRead>;
+
+typedef struct {
+    Text id;
+    uint unkui;
+    uint unkui;
+    uint unkui;
+    uint unkui;
+    uint unkui;
+    uint unkui;
+    uint unkui;
+    uint unkui;
+    uint unkui;
+    int unki;
+    Text file;
+    ubyte unkb;
+} Object; 
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+Header model_header;
+Object object;
+Object object;
+Object object;

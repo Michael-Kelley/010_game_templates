@@ -1,0 +1,40 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File: Mob.enc
+// Description: Template for CABAL's Mob.enc file (WIP)
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+
+//-Structures---------------------------
+
+typedef struct {
+    char VisualID[60];
+    char ItemID[34];
+    int Scale;
+    float unk1;
+    float MoveSpeed_Stance2;
+    float unk3;
+    float ChasSpeed;
+    float unk5;
+    int unk6;
+    int unk7;
+    int unk8;
+    int unk9;
+    int unkA;
+    float unkB;
+    int unkC;
+    int unkD;
+    int Property;
+    float unkF;
+    short Level;
+    int unk11;
+} mob;
+
+//-Main---------------------------------
+
+FSeek(0);
+
+mob Monsters[FileSize() / sizeof(mob)] <optimize=false>;

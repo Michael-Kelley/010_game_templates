@@ -1,0 +1,42 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EBM, EBS, ECH, EPS
+// Description: Adds a new Material data block.  Useful for adding layered textures to existing or custom files.
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+
+Assert(exists(estType), "No template results found.  Please run the appropriate template before attempting to run this script again.");
+Assert(estType == "EBM" || estType == "EBS" || estType == "ECH" || estType == "EPS", "File format not supported.");
+
+int count = materials_and_textures.count;
+
+int64 start = startof(materials_and_textures.materials[count - 1].layer);
+start += 26;
+
+InsertBytes(start, 100);
+materials_and_textures.count += 1;
+
+// Refresh
+RunTemplate("cabal/" + estType + ".bt");
+
+materials_and_textures.materials[count].texture.id.length = 1;
+materials_and_textures.materials[count].texture.size = 1;
+
+start = startof(materials_and_textures.materials[count].texture.id.length);
+start += 2;
+
+InsertBytes(start, 1);
+
+start = startof(materials_and_textures.materials[count].texture.size);
+start += 5;
+
+InsertBytes(start, 1);
+
+// Refresh
+RunTemplate("cabal/" + estType + ".bt");
+
+materials_and_textures.materials[count].layer.material_index = -1;
+materials_and_textures.materials[count].layer.render_flags = 4;

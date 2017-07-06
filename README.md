@@ -1,0 +1,1 @@
+Sweetscape 010 Editor scripts and templates for various game file formats.

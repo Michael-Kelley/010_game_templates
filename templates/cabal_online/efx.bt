@@ -1,0 +1,102 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EFX
+// Description: Template for CABAL's effect files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "EFX";
+
+
+//-Structures---------------------------
+
+typedef struct {
+    Bool unk_bit : 1;
+    Bool unk_bit : 1;
+    Bool unk_bit : 1;
+    Bool unk_bit : 1;
+    Bool unk_bit : 1;
+    Bool unk_bit : 1;
+    Bool unk_bit : 1;
+    Bool unk_bit : 1;
+} EFXFlag;
+
+typedef struct {
+	uint magic <format=hex>;
+	ushort unkus <format=hex>;
+	EFXFlag model_flag <format=hex>;
+    ubyte unkub;
+    ushort unkus;
+	Vector3 bound_min;        //  Bounding box lower vertex
+	Vector3 bound_max;        //  Bounding box upper vertex
+} Header;
+
+typedef struct {
+    Vector3 translate;
+    Vector3 rotate;
+    Vector3 scale;
+} Transformation;
+
+typedef struct {
+    float timestamp;
+    BoolI display_on_target;
+    Transformation transformation;
+    Text bone_id;
+    float opacity;
+    int unki;
+    Vector3 unkv3a[2];
+    byte unkb;
+    Bool uses_bone;
+} Animation;
+
+typedef struct {
+    Text id;
+    Animation animations[4] <optimize=false>;
+} Object;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+Header model_header <read=CommentHDR>;
+
+ushort unkus;
+ushort unkus;
+float timeline_length;
+
+Text root_id;
+uint unkui;
+float unkf;
+float unkf;
+
+short object_count;
+Object objects[object_count] <optimize=false>;
+
+typedef struct {
+    float unkf;
+    float unkf;
+    float unkf;
+    int unki;
+    float unkf;
+    int unki; 
+} Unknown;
+
+ushort unknown_count;
+float unkf;
+uint unkui;
+Unknown unknowns[unknown_count];
+
+
+//-Chunk-Descriptors--------------------
+
+string CommentHDR(Header &voi) {
+    return ("Unknown values, model flag, bounding box, and following chunk ID.");
+}

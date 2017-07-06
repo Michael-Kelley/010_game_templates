@@ -1,0 +1,47 @@
+typedef struct {
+    ubyte raw_data;
+} SLOT <read = slotRead, write = slotWrite>;
+
+typedef struct {
+    ushort skill_id;
+    ubyte skill_level;
+    SLOT skill_slot;
+    ubyte unk;
+} SKILL <read = skillRead, write = skillWrite>;
+
+//-Functions----------------------------
+
+string slotRead(SLOT &sl){
+    string s;
+    int type, nr;
+    type = (sl.raw_data & 0xF0) / 0x10;
+    nr = sl.raw_data & 0x0F;
+    SPrintf(s, "%d-%d", type, nr);
+    return s;
+}
+
+void slotWrite(SLOT &sl, string s) {
+    int type, nr;
+    SScanf(s, "%d-%d", type, nr);
+    sl.raw_data = type * 0x10 + nr;
+}
+
+string skillRead(SKILL &sk){
+    string s;
+    int type, nr;
+    type = (sk.skill_slot.raw_data & 0xF0) / 0x10;
+    nr = sk.skill_slot.raw_data & 0x0F;
+    SPrintf(s, "%d-%d > %d (%d)", type, nr, sk.skill_id, sk.skill_level);
+    return s;
+}
+
+void skillWrite(SKILL &sk, string s){
+    int type, nr;
+    SScanf(s, "%d-%d > %d (%d)", type, nr, sk.skill_id, sk.skill_level);
+    sk.skill_slot.raw_data = type * 0x10 + nr;
+}
+
+//-Main---------------------------------
+
+FSeek(0);
+SKILL skill_data[FileSize() / 5] <optimize=false>;

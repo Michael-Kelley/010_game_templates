@@ -1,0 +1,62 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EFK
+// Description: Template for CABAL's EFK (unknown) files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "EFK";
+
+
+//-Structures---------------------------
+
+typedef struct {
+	uint32 magic <format=hex>;
+	uint16 unk_0 <format=hex>;
+	Flag model_flags <format=hex>;
+	Vector3 bound_min;        //  Bounding box lower vertex
+	Vector3 bound_max;        //  Bounding box upper vertex
+} Header;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+Header model_header <read=CommentHDR>;
+float unkf;
+int unki;
+Range x;
+Range y;
+Range z;
+float unkf;
+float unkf;
+float unkf;
+float unkf;
+float unkf;
+float unkf;
+float unkf;
+int unki;
+float unkf;
+float unkf;
+float unkf;
+float unkf;
+float unkf;
+float unkf;
+int unki;
+int objectCount;
+Text name[objectCount]<optimize=false>;
+
+
+//-Chunk-Descriptors--------------------
+
+string CommentHDR(Header &voi) {
+    return ("Unknown values, model flag, bounding box, and following chunk ID.");
+}

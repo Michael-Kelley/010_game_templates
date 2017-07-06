@@ -1,0 +1,104 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EPS
+// Description: Template for CABAL's particle files
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "EPS";
+
+
+//-Enumerations-------------------------
+
+typedef enum <ubyte> {
+    X       = 0x01,
+    Y       = 0x02,
+    X_Y     = 0x03,
+    NONE    = 0x04,
+} Axis;     // Billboarding Axes.  Probably wrong, but at least 3 and 4 work.
+
+
+//-Structures---------------------------
+
+typedef struct {
+	uint magic <format=hex>;
+	ushort unkus <format=hex>;
+	Flag model_flags <format=hex>;
+	Vector3 bound_min;        //  Bounding box lower vertex
+	Vector3 bound_max;        //  Bounding box upper vertex
+	uint32 chunk_id <format=hex>;      //  ID for the next chunk
+} Header;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+Header model_header <read=CommentHDR>;
+
+Texture texture;
+Axis billboard;
+uint unkui;
+Vector3 translation_variance_min;
+Vector3 translation_variance_max;
+uint unki;
+Range rotation_variance_x;
+Range rotation_variance_y;
+Range rotation_variance_z;
+float emitter_rate;
+float lifetime;
+float unkf;
+float unkf;
+float unkf;
+int unki;
+uint unkui;
+float unkf;
+uint unkui;
+float unkf;
+float unkf;
+
+Colour c1 <hidden=true>;
+ParseColour(c1);
+Colour ColourStart;
+
+Colour c2 <hidden=true>;
+ParseColour(c2);
+Colour ColourMid;
+
+Colour c3 <hidden=true>;
+ParseColour(c3);
+Colour ColourEnd;
+
+SetBackColor(cNone);
+SetForeColor(cNone);
+
+float end_opacity;
+Vector3 scale_start;
+Vector3 scale_end;
+int unki;
+Range rotation_speed;
+int trail;
+
+uint unkui;
+uint unkui;
+float unkf;
+int unki;
+int unki;
+int frame_rows;
+int frame_columns;
+int frames_total;
+float unkf;
+
+
+//-Chunk-Descriptors--------------------
+
+string CommentHDR(Header &voi) {
+    return ("Unknown values, model flag, and bounding box.");
+}

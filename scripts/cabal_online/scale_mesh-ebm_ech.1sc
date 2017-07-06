@@ -1,0 +1,122 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: EBM, ECH
+// Description: Scales a mesh or all meshes by the given amounts.
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+
+Assert(exists(estType), "No template results found.  Please run the appropriate template before attempting to run this script again.");
+Assert(estType == "EBM" || estType == "ECH", "File format not supported.");
+
+int mesh = InputNumber("Please enter the Mesh index", "Mesh Index:", "0");
+
+Assert(mesh != BAD_VALUE, "No Mesh index was specified.");
+Assert(mesh < geometry.count, "Invalid Mesh index specified.");
+
+float x = InputFloat("Please enter the scale amount", "X Scale:", "1");
+
+Assert(x != (float)BAD_VALUE, "Invalid value provided for X Scale.");
+
+float y = InputFloat("Please enter the scale amount", "Y Scale:", "1");
+
+Assert(y != (float)BAD_VALUE, "Invalid value provided for Y Scale.");
+
+float z = InputFloat("Please enter the scale amount", "Z Scale:", "1");
+
+Assert(z != (float)BAD_VALUE, "Invalid value provided for Z Scale.");
+
+int scaleArm = MessageBox(idYes | idNo, "I <3 Alex", "Would you like to scale the armature (skeleton)?");
+
+if (scaleArm == idYes)
+{
+    int scaleAnim = MessageBox(idYes | idNo, "I </3 Alex trolol", "Would you like to scale the animations?  Select 'no' for a funny effect :P");
+    int scaleMove = MessageBox(idYes | idNo, "I </3 Alex trolol", "Would you like to scale the speed of the movement animations to match the new model size?");
+}
+
+int i;
+
+if (mesh == -1)
+    for (i = 0; i < geometry.count; i++)
+        ScaleMesh(i);
+else
+    ScaleMesh(mesh);
+
+ScaleBounds();
+
+if (scaleArm == idYes)
+    ScaleArmature();
+
+if (exists(scaleAnim) && scaleAnim == idYes)
+    ScaleAnimations();
+
+
+//-Methods------------------------------
+
+void ScaleMesh(int index)
+{
+    int j;
+
+    for (j = 0; j < geometry.meshes[index].vertex_count; j++)
+    {
+        if (x != 1.0f) geometry.meshes[index].vertices[j].position.x *= x;
+        if (y != 1.0f) geometry.meshes[index].vertices[j].position.y *= y;
+        if (z != 1.0f) geometry.meshes[index].vertices[j].position.z *= z;
+    }
+}
+
+void ScaleBounds()
+{
+    if (x != 1.0f) model_header.bound_min.x *= x;
+    if (y != 1.0f) model_header.bound_min.y *= y;
+    if (z != 1.0f) model_header.bound_min.z *= z;
+
+    if (x != 1.0f) model_header.bound_max.x *= x;
+    if (y != 1.0f) model_header.bound_max.y *= y;
+    if (z != 1.0f) model_header.bound_max.z *= z;
+}
+
+void ScaleArmature()
+{
+    int k = 0;
+    
+    for (k = 0; k < skeleton.count; k++)
+    {
+        if (x != 1.0f) skeleton.bones[k].bone_space_matrix.col[3].row[0] *= x;
+        if (y != 1.0f) skeleton.bones[k].bone_space_matrix.col[3].row[1] *= y;
+        if (z != 1.0f) skeleton.bones[k].bone_space_matrix.col[3].row[2] *= z;
+
+        if (x != 1.0f) skeleton.bones[k].armature_space_matrix.col[3].row[0] *= x;
+        if (y != 1.0f) skeleton.bones[k].armature_space_matrix.col[3].row[1] *= y;
+        if (z != 1.0f) skeleton.bones[k].armature_space_matrix.col[3].row[2] *= z;
+    }
+}
+
+void ScaleAnimations()
+{
+    int l = 0;
+    int m = 0;
+    int n = 0;
+    
+    for (l = 0; l < animations.count; l++)
+    {
+        for (m = 0; m < animations.animations[l].count; m++)
+        {
+            for (n = 0; n < animations.animations[l].transformations[m].translation_count; n++)
+            {
+                if (x != 1.0f) animations.animations[l].transformations[m].translations[n].position.x *= x;
+                if (y != 1.0f) animations.animations[l].transformations[m].translations[n].position.y *= y;
+                if (z != 1.0f) animations.animations[l].transformations[m].translations[n].position.z *= z;
+
+                if (exists(scaleMove) && scaleMove == idYes && Strstr(animations.animations[l].id.text, "move") != -1)
+                    animations.animations[l].transformations[m].translations[n].keyframe_second *= z;
+            }
+
+            if (exists(scaleMove) && scaleMove == idYes && Strstr(animations.animations[l].id.text, "move") != -1)
+                for (n = 0; n < animations.animations[l].transformations[m].rotation_count; n++)
+                    animations.animations[l].transformations[m].rotations[n].keyframe_second *= z;
+        }
+    }
+}

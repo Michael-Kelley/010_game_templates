@@ -1,0 +1,106 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File: mainEX.dat
+// Description: Template for CABAL's mainEX.dat file
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "MainEX.DAT";
+
+
+//-Enumerations-------------------------
+
+typedef enum <int> {
+    Korean = 1,
+    English,
+    French = 5,
+    German = 12,
+    Italian,
+    Spanish,
+    Turkish
+} Lang;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+byte unkb;
+BoolI combo_top;
+BoolI dash_cursor;
+BoolI is_fullscreen;
+uint width;
+uint height;
+uint volume_jukebox;
+uint unkui;
+uint render_distance;
+uint special_effect;
+uint unkui;
+uint unkui;
+int unki;
+uint unkui;
+uint unkui;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+Lang language;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;
+int unki;

@@ -1,0 +1,279 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File: Item.enc
+// Description: Template for CABAL's Item.enc file
+//--------------------------------------##
+// Author: Michael K.
+// Website: https://epidal.github.io/
+//--------------------------------------##
+
+#include "common.bt"
+
+
+//-Local-Variables----------------------
+
+local string estType = "Item.ENC";
+
+
+//-Enumerations-------------------------
+
+typedef enum <uint32> {
+    _1x1 = 0,
+    _1x2,
+    _1x3,
+    _1x4,
+    _2x1,
+    _2x2,
+    _2x3,
+    _2x4,
+    _3x1,
+    _3x2,
+    _3x3,
+    _3x4,
+    _4x1,
+    _4x2,
+    _4x3,
+    _4x4,
+} Slots;      // Width x Height
+
+typedef enum <uint32> {
+    Z_MARTIAL = 0,
+    M_BATTLE,
+    A_ARMOUR,
+} Display;
+
+typedef enum <uint32> {
+    NORMAL = 0,
+    NO_DROP,
+    NO_TRADE,
+    BIND_ACT,
+    NO_SELL,
+    NO_DROPSELL,
+    NO_SELLTRADE,
+    BIND_ACT_NO_SELL,
+    NO_STOR,
+    NO_DROPSTOR,
+    NO_STORTRADE,
+    BIND_CHAR,
+    NO_SELLSTOR,
+    NO_DROPSELLSTOR,
+    NO_SELLSTORTRADE,
+    BIND_CHAR_NO_SELL
+} Property;
+
+typedef enum <uint32> {
+    WA = 1,
+    BL,
+    WI,
+    FA,
+    FS,
+    FB
+} Class;
+
+typedef enum <ubyte> {
+    WA2 = 1,
+    BL2,
+    WI2,
+    FA2,
+    FS2,
+    FB2
+} ClassB;
+
+typedef enum <uint32> {
+    IDT_UCOR = 0,
+    IDT_OCOR,
+    IDT_QDID,
+    IDT_QDIT,
+    IDT_WSCL,
+    IDT_MWPN,
+    IDT_1HND,
+    IDT_2HND,
+    IDT_SUIT,
+    IDT_GLOV,
+    IDT_BOOT,
+    IDT_HMET,
+    IDT_ALZS = 13,
+    IDT_PTON,
+    IDT_RING,
+    IDT_NLCE,
+    IDT_CLOK,
+    IDT_QSTS,
+    IDT_QSTN,
+    IDT_QDMI,
+    IDT_VEHI = 22,
+    IDT_PANT = 24,
+    IDT_SPOS = 27,
+    IDT_FMUC,
+    IDT_EXTR,
+    IDT_CTOL,
+    IDT_CLVU,
+    IDT_ERNG,
+    IDT_BSLI,
+    IDT_LOTT,
+    IDT_COEN,
+    IDT_FXTS,
+    IDT_FXTN,
+    IDT_BLBD,
+    IDT_WCCL,
+    IDT_RSRT = 42,
+    IDT_CURE,
+    IDT_CHNG,
+    IDT_RNCD,
+    IDT_RSPN,
+    IDT_GLDE = 50,
+    IDT_PETN,
+    IDT_FXFS,
+    IDT_AVAN = 54,
+    IDT_BALN,
+    IDT_GEND,
+    IDT_RPNS,
+    IDT_FTSM,
+    IDT_LKWP,
+} Type;
+
+typedef enum <uint32> {
+    Upgrade_Core = 0,
+    Force_Core,
+	DT,
+	Dungeon_Count,
+	Return_Stone,
+	Force_Controller,
+	Two_Handed_Sword,
+	One_Handed_Sword,
+	Suit,
+	Glove,
+	Boot,
+	Headgear,
+	Headgear2,
+	Alz,
+	Potion,
+	Ring,
+	Amulet,
+	Epaulet,
+	QSTS,
+	QSTN,
+	Dungeon_Mission,
+	Auto_Trap,
+	Astral_Bike_Card,
+	Skill_Curcuit,
+	Plasma_Coating_Kit,
+	Event_Item,
+	SerialS,
+	Special_Potion,
+	Formula_Card,
+	Slot_Extender,
+	CA_Transmuter,
+	Craft_License,
+	Earring,
+	Bracelet,
+	Chaos_Lamp,
+	Core_Enhancer,
+	FX_ItemS,
+	FX_ItemN,
+	Blessing_Bead,
+	Return_Core,
+	Summon_Card,
+	Special_Warp_Card,
+	Ressurrection_Potion,
+	Cure_Potion,
+	Change_Kit,
+	Rename_Card,
+	Remote_Shop_Pannel,
+	Treasure_Hunting_Kit,
+	Summoning_Ritual_Kit,
+	Epaulet2,
+	Guild_Emblem,
+	Summoning_Pet,
+	FX_Item_S,
+	FX_Item_N,
+	Avatar_Item,
+	Dialog_Bubble_Item,
+	Change_Gender_Item,
+	Remote_Shop_Pannel2,
+	Recall_Force_Tower,
+	Link_Weapon,
+	Recovery_Kit,
+	Pet_Rename_Card,
+	Pet_Seal_Item,
+	Pet_Buff_Remover,
+	Gamble_Ticket,
+	Pet_Change_Kit,
+	Remote_Consignment_Agency,
+	EventS,
+	EventN,
+	Lottery,
+	FontS,
+	Ability_Rune,
+	Event_Formula_Card,
+    Pet_Sleeping_Kit,
+    Anima_Lune,
+    Ability_Rune2,
+    Warp_Stone,
+    Skill_Book,
+    Belt
+} TypeN;
+
+
+//-Structures---------------------------
+
+typedef struct {
+    char visual_id[60];
+    char item_id[60];
+    char desc_id[60];
+    ubyte unkba0[20];
+    Type type <read=CommentType>;
+    Display display_code_pt1;
+    int display_code_pt2;
+    Vector3 translation_female;
+    Vector3 translation_male;
+    Vector3 rotation_female;
+    Vector3 rotation_male;
+    float scale_male;
+    float scale_female;
+    uint limit_level;
+    Class limit_class;
+    uint limit_reputation;
+    ubyte unkba2[32];
+    uint d_str_2;
+    uint d_dex_2;
+    uint d_int_2;
+    uint price_sell;
+    Slots slot_spaces;
+    uint value_lv;
+    uint attack_rate__opt_1;
+    uint defen_rate__opt_1_val__phy_att_max;
+    uint defense__lev_lmt__mag_att_val;
+    uint max_core;
+    uint str_lmt_1__opt2;
+    uint dex_lmt_1__opt_2_val;
+    uint int_lmt_1__opt_3;
+    uint str_lmt_2__opt_3_val;
+    uint dex_lmt_2__opt_4;
+    uint int_lmt_2__opt_4_val;
+    Property property;
+    ubyte enchant_code_lnk;
+    ubyte unkb;
+    ubyte grade;
+    ubyte unkb;
+    ClassB class_id_1;
+    ClassB class_id_2;
+    ubyte period_type;
+    ubyte period_use;
+} Item;
+
+
+//-Main---------------------------------
+
+FSeek(0);
+
+Item items[FileSize() / 400] <optimize=false>;
+
+
+//-English------------------------------
+
+string CommentType(Type &t) {
+    string s;
+    TypeN tn = t;
+    SPrintf( s, "%s - %s (%i)", EnumToString(tn), EnumToString(t), t);
+    return s;
+}

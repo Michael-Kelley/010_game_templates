@@ -1,0 +1,39 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: GLD
+// Description: Template for CABAL's Guild Emblem files
+//--------------------------------------##
+// Author: x30
+// Website: http://cabal.ws
+//--------------------------------------##
+
+
+//-Enumerations-------------------------
+
+typedef struct {
+   uint xoredValue;
+} xoredUInt <read=xoredUIntRead, write=xoredUIntWrite>;
+
+
+//-Functions----------------------------
+
+string xoredUIntRead(xoredUInt &x) {
+    uint realValue = (x.xoredValue & 0xFFFFFFFF ^ 0x2147E4) - 0x59077C;
+    string s;
+    SPrintf(s, "%d", realValue);
+    return s;
+}
+
+void xoredUIntWrite(xoredUInt &x, string s ) {
+    uint realValue;
+    SScanf(s, "%d", realValue);
+    x.xoredValue = (realValue & 0xFFFFFFFF) + 0x59077C ^ 0x2147E4;
+}
+
+
+//-Main---------------------------------
+
+xoredUInt serverId;
+xoredUInt guildId;
+uint textureSize;
+ubyte xoredTextureData[textureSize];

@@ -1,0 +1,25 @@
+//--------------------------------------##
+// Game: CABAL Online
+// File Format: GLD
+// Description: Do a XOR operation on a given texture data
+//--------------------------------------##
+// Author: x30
+// Website: http://cabal.ws
+//--------------------------------------##
+
+
+//-Functions----------------------------
+
+ubyte[] textureXor(ubyte textureData[]){    
+    uint i;
+    for(i=1;i<sizeof(textureData);++i){
+        if(i%2>0) textureData[i]=textureData[i] ^ 0x5D;
+        else textureData[i]=textureData[i] ^ 0xD7;
+    }
+    return textureData;
+}
+
+
+//-Main---------------------------------
+
+textureXor(xoredTextureData);
