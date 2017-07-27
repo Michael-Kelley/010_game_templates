@@ -14,7 +14,7 @@ typedef struct {
     char VisualID[60];
     char ItemID[34];
     int Scale;
-    float unk1;
+    float Radius;
     float MoveSpeed_Stance2;
     float unk3;
     float ChasSpeed;
@@ -31,7 +31,9 @@ typedef struct {
     float unkF;
     short Level;
     int unk11;
+    short Type;
 } mob;
+
 
 //-Main---------------------------------
 

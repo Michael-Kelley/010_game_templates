@@ -31,9 +31,7 @@ typedef struct {
     float unkF;
     short Level;
     int unk11;
-    short Type;
 } mob;
-
 
 //-Main---------------------------------
 
