@@ -18,25 +18,6 @@ local string estType = "Item.ENC";
 //-Enumerations-------------------------
 
 typedef enum <uint32> {
-    _1x1 = 0,
-    _1x2,
-    _1x3,
-    _1x4,
-    _2x1,
-    _2x2,
-    _2x3,
-    _2x4,
-    _3x1,
-    _3x2,
-    _3x3,
-    _3x4,
-    _4x1,
-    _4x2,
-    _4x3,
-    _4x4,
-} Slots;      // Width x Height
-
-typedef enum <uint32> {
     Z_MARTIAL = 0,
     M_BATTLE,
     A_ARMOUR,
@@ -67,16 +48,18 @@ typedef enum <uint32> {
     WI,
     FA,
     FS,
-    FB
+    FB,
+    GL
 } Class;
 
 typedef enum <ubyte> {
-    WA2 = 1,
-    BL2,
-    WI2,
-    FA2,
-    FS2,
-    FB2
+    WA_ = 1,
+    BL_,
+    WI_,
+    FA_,
+    FS_,
+    FB_,
+    GL_
 } ClassB;
 
 typedef enum <uint32> {
@@ -132,133 +115,229 @@ typedef enum <uint32> {
 } Type;
 
 typedef enum <uint32> {
-    Upgrade_Core = 0,
+    Upgrade_Core,
     Force_Core,
-	DT,
-	Dungeon_Count,
-	Return_Stone,
-	Force_Controller,
-	Two_Handed_Sword,
-	One_Handed_Sword,
-	Suit,
-	Glove,
-	Boot,
-	Headgear,
-	Headgear2,
-	Alz,
-	Potion,
-	Ring,
-	Amulet,
-	Epaulet,
-	QSTS,
-	QSTN,
-	Dungeon_Mission,
-	Auto_Trap,
-	Astral_Bike_Card,
-	Skill_Curcuit,
-	Plasma_Coating_Kit,
-	Event_Item,
-	SerialS,
-	Special_Potion,
-	Formula_Card,
-	Slot_Extender,
-	CA_Transmuter,
-	Craft_License,
-	Earring,
-	Bracelet,
-	Chaos_Lamp,
-	Core_Enhancer,
-	FX_ItemS,
-	FX_ItemN,
-	Blessing_Bead,
-	Return_Core,
-	Summon_Card,
-	Special_Warp_Card,
-	Ressurrection_Potion,
-	Cure_Potion,
-	Change_Kit,
-	Rename_Card,
-	Remote_Shop_Pannel,
-	Treasure_Hunting_Kit,
-	Summoning_Ritual_Kit,
-	Epaulet2,
-	Guild_Emblem,
-	Summoning_Pet,
-	FX_Item_S,
-	FX_Item_N,
-	Avatar_Item,
-	Dialog_Bubble_Item,
-	Change_Gender_Item,
-	Remote_Shop_Pannel2,
-	Recall_Force_Tower,
-	Link_Weapon,
-	Recovery_Kit,
-	Pet_Rename_Card,
-	Pet_Seal_Item,
-	Pet_Buff_Remover,
-	Gamble_Ticket,
-	Pet_Change_Kit,
-	Remote_Consignment_Agency,
-	EventS,
-	EventN,
-	Lottery,
-	FontS,
-	Ability_Rune,
-	Event_Formula_Card,
-    Pet_Sleeping_Kit,
-    Anima_Lune,
+    DT_Card,
+    Dungeon_Count,
+    Return_Stone,
+    Force_Controller,
+    One_handed_Sword,
+    Two_handed_Sword,
+    Suit,
+    Glove,
+    Boot,
+    Headgear1,
+    Headgear2,
+    Alz,
+    Potion,
+    Ring,
+    Amulet,
+    Epaulet,
+    QuestS,
+    QuestN,
+    Dungeon_Mission,
+    Auto_Trap,
+    Astral_Bike_Card,
+    Skill_Circuit,
+    Plasma_Coating_Kit,
+    Event_Item,
+    SerialS,
+    Special_Potion,
+    Formula_Card,
+    Slot_Extender,
+    CA_Transmuter,
+    Craft_License,
+    Earring,
+    Bracelet,
+    Lotto,
+    Core_Enhancer,
+    FX_ItemS,
+    FX_ItemN,
+    Blessing_Bead,
+    Return_Core,
+    Summon_Card,
+    Special_Warp_Card,
+    Resurrection_Potion,
+    Cure_Potion,
+    Change_Kit,
+    Rename_Card,
+    Remote_Shop_Pannel,
+    Treasure_Hunting_Kit,
+    Summoning_Ritual_Kit,
+    Epaulet2,
+    Guild_Emblem,
+    Summoning_Pet,
+    TR_FX_Item_S,
+    TR_FX_Item_N,
+    Avatar_Item,
+    Dialogue_Bubble_Item,
+    Change_Gender_Item,
+    Remote_Shop_Pannel2,
+    Recall_Force_Tower,
+    Link_Weapon,
+    Recovery_Kit,
+    Pet_Rename_Card,
+    Pet_Seal_Item,
+    Pet_Buff_Remover,
+    Gamble_Ticket,
+    Pet_Change_Kit,
+    Agent_Shop,
+    EventS,
+    EventN,
+    Lottery,
+    FontS,
+    Ability_Rune,
+    Event_Formula_Card,
+    Pet_Safety_Kit,
+    Anima_Gem,
     Ability_Rune2,
     Warp_Stone,
     Skill_Book,
-    Belt
+    Belt,
+    Premium_Item,
+    Agent_Shop_Coupon,
+    Megaphone,
+    Frontier_Stone,
+    Multi_Buff_Potion,
+    Remote_Warehouse,
+    Expand_pet_slot,
+    Pack_in_a_Giftbox,
+    Summon_party_member,
+    Resurrect_party_member,
+    Gift_Voucher,
+    Yield_EXP_to_a_party_member,
+    Absorb_DMG_for_a_party_member,
+    Decorate_Shop,
+    Prevent_Enchant_Degradation,
+    Mercenary_Card,
+    Protection_of_Veradrix,
+    Damage_Amplifier,
+    Bike_Upgrade_Core,
+    Bike_Force_Core,
+    Bike_Extender,
+    Bike_Enhancer,
+    Immediate_Reward,
+    Force_Core_Order_Sheet,
+    Armor_Switch,
+    Board_Card,
+    Change_Appearance,
+    Party_Member_Warp,
+    Potion_N,
+    Multi_Buff_Potion_N,
+    Quest_Capsule,
+    Point_Save,
+    Pet_Untrain_Kit__Option_Selective,
+    Guild_Rename_Card,
+    Guild_Creation,
+    Guild_Level_Up,
+    Option_Scroll_Protecter,
+    Item_Option_remover,
+    Charm,
+    Slot_Converter,
+    Epic_Converter,
+    Binding_Converter,
+    Prison_Break_Item,
+    LottoS,
+    Extreme_Core,
+    Repair_Core,
+    Account_bind_Seal,
+    Effector,
+    Mirror_of_Observation,
+    Day_of_Week_Dungeon,
+    Oath_of_Soul,
+    Character_Open,
+    Chakram,
+    Chaos_Core,
+    Monster_Summon_Stone,
+    Meritorious_Medal,
+    Meritorious_Medal_auxiliary_item,
+    Epic_Booster,
+    Potion_of_War,
+    Force_Gem,
+    Force_Gem_Package,
+    Talisman,
+    Dummy_Costume,
+    Costume_Safety_Kit,
+    Costume_Seal_Stone,
+    Unique_Costume,
+    Upgrade_Token,
+    Headgear3,
+    War_Coin,
+    Rune_Slot_Extender,
+    Carnelian,
+    Headgear4
 } TypeN;
 
 
 //-Structures---------------------------
 
 typedef struct {
-    char visual_id[60];
-    char item_id[60];
-    char desc_id[60];
-    ubyte unkba0[20];
-    Type type <read=CommentType>;
-    Display display_code_pt1;
-    int display_code_pt2;
-    Vector3 translation_female;
-    Vector3 translation_male;
-    Vector3 rotation_female;
-    Vector3 rotation_male;
-    float scale_male;
-    float scale_female;
-    uint limit_level;
-    Class limit_class;
-    uint limit_reputation;
-    ubyte unkba2[32];
-    uint d_str_2;
-    uint d_dex_2;
-    uint d_int_2;
-    uint price_sell;
-    Slots slot_spaces;
-    uint value_lv;
-    uint attack_rate__opt_1;
-    uint defen_rate__opt_1_val__phy_att_max;
-    uint defense__lev_lmt__mag_att_val;
-    uint max_core;
-    uint str_lmt_1__opt2;
-    uint dex_lmt_1__opt_2_val;
-    uint int_lmt_1__opt_3;
-    uint str_lmt_2__opt_3_val;
-    uint dex_lmt_2__opt_4;
-    uint int_lmt_2__opt_4_val;
-    Property property;
-    ubyte enchant_code_lnk;
-    ubyte unkb;
-    ubyte grade;
-    ubyte unkb;
-    ClassB class_id_1;
-    ClassB class_id_2;
-    ubyte period_type;
-    ubyte period_use;
+    int         height : 2,
+                width : 2;
+} Size;
+
+typedef struct {
+    int         item_idx;
+    char        visual_id[60],
+                item_id[60],
+                desc_id[60];
+    byte        pad0[20] <hidden=true>;
+    Type        type <read=CommentType>;
+    Display     display_code_pt1;
+    int         display_code_pt2;
+    Vec3f       translation_female,
+                translation_male,
+                rotation_female,
+                rotation_male;
+    float       scale_male,
+                scale_female;
+    uint        limit_level;
+    Class       limit_class;
+    int         limit_reputation;
+    uint        price2;
+    byte        junk[21];
+    int         unki;   // Seems to be 1 for a lot of equipment, but not all...
+    uint        price_sell;
+    Size        size_in_slots <read=ReadSize>;
+    int         value_lv,
+                attack_rate__opt_1,
+                defen_rate__opt_1_val__phy_att_max,
+                defense__lev_lmt__mag_att_val,
+                max_core,
+                str_lmt_1__opt2,
+                dex_lmt_1__opt_2_val,
+                int_lmt_1__opt_3,
+                str_lmt_2__opt_3_val,
+                dex_lmt_2__opt_4,
+                int_lmt_2__opt_4_val,
+                str_lmt_3,
+                dex_lmt_3,
+                int_lmt_3,
+                d_str_1,  // These values seem to be the stat delta for upgrades.  IE. how much the stat requirements increase for every + on the item.
+                d_dex_1,
+                d_int_1,
+                d_str_2,
+                d_dex_2,
+                d_int_2,
+                d_str_3,
+                d_dex_3,
+                d_int_3;
+    Property    property;
+    ubyte       enchant_code_lnk,
+                unkb,
+                grade,
+                unkb;
+    ClassB      class_id_1,
+                class_id_2,
+                class_id_3;
+    ubyte       period_type,
+                period_use,
+                unique_grade;
+    int         max_reputation;
+    byte        unkb,
+                unkb,
+                unkb;
+    short       max_stack_size;
 } Item;
 
 
@@ -266,7 +345,10 @@ typedef struct {
 
 FSeek(0);
 
-Item items[FileSize() / 400] <optimize=false>;
+if (FileSize() / sizeof(Item) > 4094)
+    Item items[4094];
+else
+    Item items[FileSize() / sizeof(Item)] <optimize=false>;
 
 
 //-English------------------------------
@@ -276,4 +358,10 @@ string CommentType(Type &t) {
     TypeN tn = t;
     SPrintf( s, "%s - %s (%i)", EnumToString(tn), EnumToString(t), t);
     return s;
+}
+
+string ReadSize(Size &s) {
+    string r;
+    SPrintf(r, "%i x %i", s.width + 1, s.height + 1);
+    return r;
 }
